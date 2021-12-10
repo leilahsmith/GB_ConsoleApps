@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8B91B9C6-D622-4690-B28B-81DA3E614A0F}</ProjectGuid>
+    <ProjectGuid>{4F9BEC84-0EBB-42A3-A886-6F90DE14D361}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>KomodoCafe</RootNamespace>
-    <AssemblyName>KomodoCafe</AssemblyName>
+    <RootNamespace>KomodoInsurance</RootNamespace>
+    <AssemblyName>KomodoInsurance</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,10 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IKC_Repo.cs" />
-    <Compile Include="KC_Poco.cs" />
-    <Compile Include="KC_Repo.cs" />
-    <Compile Include="KC_TestableRepo.cs" />
+    <Compile Include="ClaimPoco.cs" />
+    <Compile Include="ClaimRepo.cs" />
+    <Compile Include="IClaimRepo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
