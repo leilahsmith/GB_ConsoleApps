@@ -8,18 +8,18 @@ namespace KomodoCafe
 {
     class KC_TestableRepo
     {
-        public readonly List<KC_Poco> _listOfItems = new List<KC_Poco>();
+        public readonly List<KC_Poco> _menuRepo = new List<KC_Poco>();
 
         // Create: Program file that allows the cafe manager to ADD items in the Menu List
         public void AddItemsToMenu(KC_Poco items)
         {
-            _listOfItems.Add(items);
+            _menuRepo.Add(items);
         }
 
         // Read: SEE all items in the menu list
-        public List<KC_Poco> GetMenuItems()
+        public List<KC_Poco> GetCafeItems()
         {
-            return _listOfItems;
+            return _menuRepo;
         }
 
         // Update - Not needed in this case
@@ -28,25 +28,21 @@ namespace KomodoCafe
         // Delete: DELETE menu items 
         public bool RemoveItemFromList(int number)
         {
-            List<KC_Poco> _listofItems = GetMenuItems();
-            foreach (KC_Poco item in _listofItems)
+            List<KC_Poco> _menuRepo = GetCafeItems();
+            foreach (KC_Poco item in _menuRepo)
             {
                 if (item.Number == number)
                 {
-                    _listOfItems.Remove(item);
+                    _menuRepo.Remove(item);
                     return true;
                 }
                 else
                 {
-                    _listOfItems.Remove(item);
+                    _menuRepo.Remove(item);
                     return false;
                 }
             }
-
             return RemoveItemFromList(number);
-
-
-
         }
     }
 }

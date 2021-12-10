@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace KomodoCafe
 {
-    class KC_Poco
-    {
+    
         public enum MenuContents
         {
             CafeAmericano = 1,
@@ -24,8 +23,8 @@ namespace KomodoCafe
         public class KC_Poco
         {
             //Empty Constructor
-            public KC_Poco(KC_Poco items) { }
-            public KC_Poco(string title) { }
+            public KC_Poco(KC_Poco newItems) { }
+            public KC_Poco() { }
 
 
             //Full Constructor
@@ -46,4 +45,4 @@ namespace KomodoCafe
 
         }
     }
-}
+
