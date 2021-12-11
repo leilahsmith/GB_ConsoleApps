@@ -46,11 +46,11 @@ namespace KomodoBadges
                         break;
                     case "2":
                         //View all items
-                        ViewExistingBadges();
+                        ViewAllBadges();
                         break;
                     case "3":
                         //Delete Exisitng Items
-                        DeleteExistingBadges();
+                        DeleteExistingAccessOnBadges();
                         break;
                     case "4":
                         //Exit
@@ -111,45 +111,145 @@ namespace KomodoBadges
             Console.ReadKey();
         }
 
+        private BadgeRepo Get_listOfBadges()
+        {
+            return _listOfBadges;
+        }
+
         // View current menu items that are saved
-        private void ViewExistingBadges()
+        public void ViewAllBadges()
         {
             Console.Clear();
-            List<BadgeListPoco> listOfItems = _listOfBadges.ViewExistingBadges();
-
-            foreach (BadgeListPoco badges in _listOfBadges)
+            Console.WriteLine("=-=-=-=- View All Badges -=-=-=-=");
+            Console.WriteLine("Badge#           Door Access:");
+            Dictionary<int, List<string>> badges = _listOfBadges.ViewExistingBadges();
+            foreach (KeyValuePair<int, List<string>> badge in badges)
             {
-                Console.WriteLine($"{badges.BadgeNumber}.\n" + $"{badges.Doors}\n");
+                string doorsResult = string.Join(",", badge.Value);
+                Console.WriteLine($"{badge.Key}            {doorsResult}");
+
             }
+            PressAnyKeyToReturnToMainMenu();
         }
         //Update existing items
-        //*NEED TO WORK ON THIS PART
-
-
-        // Delete existing items
-        private void DeleteExistingBadges()
+        //*NEED TO WORK ON THIS PARTpublic void EditBadge()
+        public void UpdateExistingBadge()
         {
-            ViewExistingBadges();
-            // Get the item they want to remove
-            Console.WriteLine("\nEnter the number of the badge you'd like to remove:");
-            int input = Int32.Parse(Console.ReadLine());
-
-            // Call the delete method
-            bool deleteConfirm = _listOfBadges.DeleteExistingBadges(input);
-
-            // If the content was deleted, say so
-            // Otherwise state it couldn't be deleted. 
-
-            if (deleteConfirm)
+            Console.Clear();
+            Console.WriteLine("<--- Update a Badge --->");
+            Console.WriteLine("What is the badge number you would like to update?:");
+            int badgeNumber = Convert.ToInt32(Console.ReadLine());
+            BadgeListPoco badgeToUpdate = _listOfBadges.GetABadgeByID(badgeNumber);
+            List<string> doorsOnBadge = new List<string>();
+            if (badgeToUpdate != null)
             {
-                Console.WriteLine("The access was successfully deleted from the badge.");
+                doorsOnBadge = badgeToUpdate.Doors;
+                bool looper = true;
+                while (looper)
+                {
+
+                    Console.Clear();
+                    string doorsResult = string.Join(",", badgeToUpdate.Doors);
+                    Console.WriteLine($"Badge #{badgeToUpdate.BadgeID} has access to doors: {doorsResult}.");
+                    Console.WriteLine("What would you like to do?");
+                    Console.WriteLine("     1. Remove a door");
+                    Console.WriteLine("     2. Add a door");
+                    Console.WriteLine("     3. Finish Updating Badge");
+                    string menuSelect = Console.ReadLine();
+                    switch (menuSelect)
+                    {
+                        case "1":
+                            Console.WriteLine("Which door would you like to remove?");
+                            string doorToRemove = Console.ReadLine();
+                            doorsOnBadge.Remove(doorToRemove);
+                            badgeToUpdate.Doors = doorsOnBadge;
+                            Console.WriteLine("Door Removed");
+                            doorsResult = string.Join(",", badgeToUpdate.Doors);
+                            Console.WriteLine($"Badge #{badgeToUpdate.BadgeID} has access to doors: {doorsResult}.");
+                            Console.WriteLine("Press any key to continue.");
+                            Console.ReadKey();
+                            break;
+                        case "2":
+                            Console.WriteLine("Which door would you like to add?");
+                            string doorToAdd = Console.ReadLine();
+                            doorsOnBadge.Add(doorToAdd);
+                            badgeToUpdate.Doors = doorsOnBadge;
+                            Console.WriteLine("Door Added");
+                            doorsResult = string.Join(",", badgeToUpdate.Doors);
+                            Console.WriteLine($"Badge #{badgeToUpdate.BadgeID} has access to doors: {doorsResult}.");
+                            Console.WriteLine("Press any key to continue.");
+                            Console.ReadKey();
+                            break;
+                        case "3":
+                            looper = false;
+                            break;
+                    }
+
+                }
+                bool wasUpdate = _listOfBadges.UpdateExistingBadge(badgeNumber, badgeToUpdate);
+                if (wasUpdate == true)
+                {
+                    Console.WriteLine("Badge updated successfully");
+                }
+                else
+                {
+                    Console.WriteLine("Sorry! Something went wrong.  Please try to update again.");
+                }
             }
             else
             {
-                Console.WriteLine("The access was not deleted successfully from the badge. Please try again.");
-            }
+                Console.WriteLine("Sorry. Badge ID not found.");
 
+            }
+            Console.WriteLine("Press any key to return to the main menu");
+            Console.ReadKey();
         }
+
+        // Delete existing items
+        private void DeleteExistingAccessOnBadges()
+        {
+            Console.Clear();
+            Console.WriteLine("=-=-=-=- Delete All Doors From Badge -=-=-=-=");
+            Console.WriteLine("What is the badge number you would like to update:");
+            int badgeNumber = Convert.ToInt32(Console.ReadLine());
+            BadgeListPoco badgeToUpdate = _listOfBadges.GetABadgeByID(badgeNumber);
+            List<string> doorsOnBadge = new List<string>();
+            if (badgeToUpdate != null)
+            {
+                string doorsResult = string.Join(",", badgeToUpdate.Doors);
+                Console.WriteLine($"Badge #{badgeToUpdate.BadgeID} has access to doors: {doorsResult}.");
+                Console.WriteLine($"Do you want to clear all doors from Badge #{badgeToUpdate.BadgeID}? (y/n)");
+                string deleteAll = Console.ReadLine();
+                if (deleteAll.ToLower() == "y")
+                {
+                    badgeToUpdate.Doors.Clear();
+                    bool wasUpdate = _listOfBadges.UpdateExistingBadge(badgeNumber, badgeToUpdate);
+                    if (wasUpdate == true)
+                    {
+                        Console.WriteLine($"All Doors Deleted from Badge #{badgeNumber}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Sorry! Something went wrong.  Please try update again.");
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Cancel confirmed.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Sorry, badge ID could not be found.");
+
+            }
+            Console.WriteLine("Press any key to return to the main menu");
+            Console.ReadKey();
+        }
+
+     
+
         public void PressAnyKeyToReturnToMainMenu()
         {
             Console.WriteLine("Press any key to return to Main Menu.");

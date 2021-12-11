@@ -60,7 +60,7 @@ namespace KomodoBadges
 
         //Delete
 
-        public bool DeleteBadge(BadgeListPoco badge)
+        public bool DeleteExistingAccessOnBadges(BadgeListPoco badge)
         {
             bool deleteBadge = _listOfBadges.Remove(badge.BadgeID);
             return deleteBadge;
